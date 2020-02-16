@@ -8,3 +8,5 @@ Hello Kubernetes(k8s)
 # curl installation
 
 # tree installation
+
+# kubeadm, kubectl, kubelet installation
