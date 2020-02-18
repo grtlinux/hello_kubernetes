@@ -45,3 +45,8 @@ Halt the vagrant machine now.
 $ vagrant halt
 ```
 Other useful commands are suspend, destroy etc.
+
+# Reference
+- [Vagrant](https://sourabhbajaj.com/mac-setup/Vagrant/README.html)
+- [vagrant 설치 in OSX](https://junho85.pe.kr/1426)
+- [vagrant 로 ubuntu/precise64 설치하기](https://junho85.pe.kr/1428)
