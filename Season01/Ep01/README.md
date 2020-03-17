@@ -61,6 +61,7 @@ $ cat Vagrantfile
 
     end
 $ vagrant up
+    < wait 1 or 2 minutes >
 
 ```
 
@@ -78,38 +79,42 @@ $ vboxmanage list runningvms
 
 ```
 $ vagrant ssh kmaster
-    # cat /etc/redhat-release
-    # nproc
-    # free -m
-    # df -h
-    # hostname -a
-    # ip a
-    # logout
+    [vagrant@kmaster ~]$ cat /etc/redhat-release
+    [vagrant@kmaster ~]$ nproc
+    [vagrant@kmaster ~]$ free -m
+    [vagrant@kmaster ~]$ df -h
+    [vagrant@kmaster ~]$ hostname -a
+    [vagrant@kmaster ~]$ ip a
+    [vagrant@kmaster ~]$ logout
 
 $ vagrant ssh kworker1
-    # cat /etc/redhat-release
-    # nproc
-    # free -m
-    # df -h
-    # hostname -a
-    # ip a
-    # logout
+    [vagrant@kworker1 ~]$ cat /etc/redhat-release
+    [vagrant@kworker1 ~]$ nproc
+    [vagrant@kworker1 ~]$ free -m
+    [vagrant@kworker1 ~]$ df -h
+    [vagrant@kworker1 ~]$ hostname -a
+    [vagrant@kworker1 ~]$ ip a
+    [vagrant@kworker1 ~]$ logout
 $
 ```
 
 ## Poweroff and Delete the virtual machines
 
 ```
+$ vboxmanage list vms
+$ vboxmanage list runningvms
 $ vagrant halt
+$ vboxmanage list runningvms
 $ vagrant destroy -f
+$ vboxmanage list vms
 $ vagrant status
 ```
 
 ## Remove vagrant box
 
 ```
-$ vagrant box list
 $ vagrant box remove --all centos/7
+$ vagrant box list
 $ tree ~/.vagrant.d
 ```
 
