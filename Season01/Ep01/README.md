@@ -3,6 +3,14 @@ Follow this documentation to set up a Kubernetes cluster on __CentOS 7__ Virtual
 
 This documentation guides you in setting up a cluster with one master node and one worker node.
 
+## Ready
+|Preinstall|Version|
+|----|----|
+|Vagrant|1.0|
+|VirtualBox|6.0|
+
+
+
 ## Assumptions
 |Role|FQDN|IP|OS|RAM|CPU|
 |----|----|----|----|----|----|
@@ -10,7 +18,6 @@ This documentation guides you in setting up a cluster with one master node and o
 |Worker1|kworker1.example.com|172.42.42.101|CentOS 7|1G|1|
 
 ## Get Git information
-
 ```
 $ mkdir play && cd $_
 $ git clone https://github.com/grtlinux/hello_kubernetes.git
@@ -98,117 +105,127 @@ $ vagrant ssh kworker1
 
 ## On both machines jobs (kmaster/kworker1)
 
-### Change /etc/hosts file
+#### Change /etc/hosts file
 
 ```
     $ sudo -i
     # cat >>/etc/hosts<<EOF
         172.42.42.100 kmaster.example.com kmaster
         172.42.42.101 kworker1.example.com kworker1
-        EOF
+EOF
     # ping kmaster
     # ping kworker1
 ```
 
-### Install docker and start service
+#### Install docker and start service
 
 Use the Docker repository to install docker
 > If you use docker from CentOS OS repository, the docker version might be old to work with Kubernetes v1.13.0 and above
 ```
     # yum install -y -q yum-utils device-mapper-persistent-data lvm2 > /dev/null 2>&1
-    # yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo > /dev/null 2>&1
+    # yum-config-manager --add-repo \
+        https://download.docker.com/linux/centos/docker-ce.repo > /dev/null 2>&1
     # yum install -y -q docker-ce >/dev/null 2>&1
     # systemctl enable docker
     # systemctl start docker
+    # systemctl status docker
 ```
 
-### Disable SELinux
+#### Disable SELinux
 
 ```
     # setenforce 0
-    # sed -i --follow-symlinks 's/^SELINUX=enforcing/SELINUX=disabled/' /etc/sysconfig/selinux
+    # sed -i --follow-symlinks 's/^SELINUX=enforcing/SELINUX=disabled/' \
+        /etc/sysconfig/selinux
 ```
 
-### Disabel Firewall
+#### Disabel Firewall
 
 ```
     # systemctl disable firewalld
     # systemctl stop firewalld
+    # systemctl status firewalld
 ```
 
-### Disable swap
+#### Disable swap
 
 ```
     # sed -i '/swap/d' /etc/fstab
     # swapoff -a
 ```
 
-### Update sysctl settings for Kubernetes networking
+#### Update sysctl settings for Kubernetes networking
 
 ```
     # cat >>/etc/sysctl.d/kubernetes.conf<<EOF
         net.bridge.bridge-nf-call-ip6tables = 1
         net.bridge.bridge-nf-call-iptables = 1
-        EOF
+EOF
     # sysctl --system
 ```
 
 ## Kubernetes Setup
 
-### Add yum repository
+#### Add yum repository
 
 ```
     # cat >>/etc/yum.repos.d/kubernetes.repo<<EOF
-        [kubernetes]
-        name=Kubernetes
-        baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
-        enabled=1
-        gpgcheck=1
-        repo_gpgcheck=1
-        gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
-                https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-        EOF
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
+        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
 ```
 
-### Install Kubernetes
+#### Install Kubernetes
 
 ```
     # yum install -y kubeadm kubelet kubectl
 ```
 
-### Enable and Start kubelet service
+#### Enable and Start kubelet service
 
 ```
     # systemctl enable kubelet
     # systemctl start kubelet
+    # systemctl status kubelet
 ```
 
 ## On kmaster
 
-### Initialize Kubernetes Cluster
+#### Initialize Kubernetes Cluster
 
 ```
-    # kubeadm init --apiserver-advertise-address=172.42.42.100 --pod-network-cidr=192.168.0.0/16
+    # kubeadm init --apiserver-advertise-address=172.42.42.100 \
+        --pod-network-cidr=192.168.0.0/16
 ```
 
-### Copy kube config
+#### Copy kube config
 
 To be able to use kubectl command to connect and interact with the cluster, the user needs kube config file.
-In my case, the user account is venkatn
+In my case, the user account is __vagrant__
 ```
-    # mkdir /home/venkatn/.kube
-    # cp /etc/kubernetes/admin.conf /home/venkatn/.kube/config
-    # chown -R venkatn:venkatn /home/venkatn/.kube
+    $ mkdir /home/vagrant/.kube
+    $ sudo cp /etc/kubernetes/admin.conf /home/vagrant/.kube/config
+    $ sudo chown -R vagrant:vagrant /home/vagrant/.kube
+
+    $ kubectl cluster-info
+    $ kubectl version --short
+    $ kubectl get nodes
 ```
 
-### Deploy Calico network
+#### Deploy Calico network
 
-This has to be done as the user in the above step (in my case it is __venkatn__)
+This has to be done as the user in the above step (in my case it is __vagrant__)
 ```
     # kubectl create -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml
 ```
 
-### Cluster join command
+#### Cluster join command
 
 ```
     # kubeadm token create --print-join-command
@@ -223,13 +240,13 @@ Use the output from __kubeadm token create__ command in previous step from the m
 
 ## Verifying the cluster
 
-### Get Nodes status
+#### Get Nodes status
 
 ```
     # kubectl get nodes
 ```
 
-### Get component status
+#### Get component status
 
 ```
     # kubectl get cs
