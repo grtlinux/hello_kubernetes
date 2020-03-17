@@ -195,6 +195,13 @@ EOF
     # systemctl status kubelet
 ```
 
+#### Enable ssh password authentication
+```
+    # sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' \
+        /etc/ssh/sshd_config
+    # systemctl reload sshd
+```
+
 ## On kmaster
 
 #### Initialize Kubernetes Cluster
