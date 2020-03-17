@@ -83,6 +83,8 @@ $ vagrant ssh kmaster
     # free -m
     # df -h
     # hostname -a
+    # ip a
+    # logout
 
 $ vagrant ssh kworker1
     # cat /etc/redhat-release
@@ -90,6 +92,9 @@ $ vagrant ssh kworker1
     # free -m
     # df -h
     # hostname -a
+    # ip a
+    # logout
+$
 ```
 
 ## Poweroff and Delete the virtual machines
