@@ -1,3 +1,15 @@
+# Ep01. Setup Kubernetes Cluster using kubeadm on CentOS 7
+Follow this documentation to set up a Kubernetes cluster on __CentOS 7__ Virtual machines.
+
+This documentation guides you in setting up a cluster with one master node and one worker node.
+
+## Assumptions
+|Role|FQDN|IP|OS|RAM|CPU|
+|----|----|----|----|----|----|
+|Master|kmaster.example.com|172.42.42.100|CentOS 7|2G|2|
+|Worker1|kworker1.example.com|172.42.42.101|CentOS 7|1G|1|
+
+---
 # Install Kubernetes Cluster using kubeadm
 Follow this documentation to set up a Kubernetes cluster on __CentOS 7__ Virtual machines.
 
