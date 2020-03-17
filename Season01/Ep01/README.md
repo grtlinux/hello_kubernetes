@@ -229,7 +229,7 @@ In my case, the user account is __vagrant__
 
 This has to be done as the user in the above step (in my case it is __vagrant__)
 ```
-    # kubectl create -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml
+    $ kubectl create -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml
 ```
 
 #### Cluster join command
