@@ -70,6 +70,26 @@ $ vagrant up
 $ vagrant status
 $ vagrant box list
 $ tree ~/.vagrant.d
+$ vboxmanage list vms
+$ vboxmanage list runningvms
+```
+
+## SSH connection
+
+```
+$ vagrant ssh kmaster
+    # cat /etc/redhat-release
+    # nproc
+    # free -m
+    # df -h
+    # hostname -a
+
+$ vagrant ssh kworker1
+    # cat /etc/redhat-release
+    # nproc
+    # free -m
+    # df -h
+    # hostname -a
 ```
 
 ## Poweroff and Delete the virtual machines
@@ -77,15 +97,14 @@ $ tree ~/.vagrant.d
 ```
 $ vagrant halt
 $ vagrant destroy -f
+$ vagrant status
 ```
 
 ## Remove vagrant box
 
 ```
-$ tree ~/.vagrant.d
 $ vagrant box list
 $ vagrant box remove --all centos/7
-$ vagrant box list
 $ tree ~/.vagrant.d
 ```
 
