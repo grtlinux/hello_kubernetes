@@ -64,6 +64,31 @@ $ vagrant up
 
 ```
 
+## Confirm the virtual machines
+
+```
+$ vagrant status
+$ vagrant box list
+$ tree .vagrant.d
+```
+
+## Poweroff and Delete the virtual machines
+
+```
+$ vagrant halt
+$ vagrant destroy -f
+```
+
+## Remove vagrant box
+
+```
+$ tree .vagrant.d
+$ vagrant box list
+$ vagrant box remove --all centos/7
+$ vagrant box list
+$ tree .vagrant.d
+```
+
 ---
 
 Have Fun!!
