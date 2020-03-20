@@ -12,7 +12,7 @@ chown -R vagrant:vagrant /home/vagrant/.kube
 
 # deploy flannel network
 echo "[TASK 3] deploy flannel network"
-su - vagrant -c "kubectl create -f /vagrant/kube-flannel.yaml"
+su - vagrant -c "kubectl create -f https://github.com/coreos/flannel/blob/master/Documentation/kube-flannel.yml"
 
 # deploy calio network
 #echo "[TASK 3] deploy calico network"
