@@ -29,6 +29,7 @@ $ cd hello_kubernetes/Season01/Ep02/run
 
 #### Check installation files
 
+- Vagrantfile
 ```
 $ cat Vagrantfile
     # -*- mode: ruby -*-
@@ -75,7 +76,9 @@ $ cat Vagrantfile
       end
 
     end
-
+```
+- bootstrap.sh
+```
 $ cat bootstrap.sh
     #!/bin/bash
 
@@ -155,7 +158,9 @@ $ cat bootstrap.sh
     # update vagrant user's bashrc file
     echo "[TASK 13] update vagrant user's bashrc file"
     echo "export TERM=xterm" >> /etc/bashrc
-
+```
+- bootstrap_kmaster.sh
+```
 $ cat bootstrap_kmaster.sh
     #!/bin/bash
 
@@ -177,7 +182,9 @@ $ cat bootstrap_kmaster.sh
     # generate cluster join command
     echo "[TASK 4] generate and save cluster join command to /joincluster.sh"
     kubeadm token create --print-join-command > /joincluster.sh
-
+```
+- bootstrap_kworker.sh
+```
 $ cat bootstrap_kworker.sh
     #!/bin/bash
 
@@ -189,7 +196,7 @@ $ cat bootstrap_kworker.sh
     bash /joincluster.sh >/dev/null 2>&1
 ```
 
-#### Installation
+#### Installation by __vagrant up__
 
 ```
 $ vagrant up
@@ -200,7 +207,7 @@ $ vagrant up
 ## Copy cluster config file to local
 
 ```
-$ rm ~/.ssh/known_host
+$ rm ~/.ssh/known_hosts
 $ mkdir ~/.kube
 $ scp vagrant@kmaster:.kube/config ~/.kube/config
 
@@ -208,3 +215,49 @@ $ kubectl cluster-info
 $ kubectl version --short
 $ kubectl get nodes
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Poweroff and Delete the virtual machines
+
+```
+$ vboxmanage list vms
+$ vboxmanage list runningvms
+$ vagrant halt
+$ vboxmanage list runningvms
+$ vagrant destroy -f
+$ vboxmanage list vms
+$ vagrant status
+```
+
+## Remove vagrant box
+
+```
+$ vagrant box remove --all centos/7
+$ vagrant box list
+$ tree ~/.vagrant.d
+$ cd ../../../..
+$ rm -rf hello_kubernetes
+```
+
+---
+
+Have Fun!!

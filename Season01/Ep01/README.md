@@ -278,8 +278,8 @@ $ vagrant status
 $ vagrant box remove --all centos/7
 $ vagrant box list
 $ tree ~/.vagrant.d
-$ cd ../../../../..
-$ rm -rf play
+$ cd ../../../..
+$ rm -rf hello_kubernetes
 ```
 
 ---
