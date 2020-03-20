@@ -71,7 +71,7 @@ systemctl reload sshd
 
 # set root password
 echo "[TASK 12] set root password"
-echo "kubeadmin" | password --stdin root >/dev/null 2>&1
+echo "kubeadmin" | passwd --stdin root >/dev/null 2>&1
 
 # update vagrant user's bashrc file
 echo "[TASK 13] update vagrant user's bashrc file"
