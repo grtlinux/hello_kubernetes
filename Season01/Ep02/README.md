@@ -27,6 +27,8 @@ $ cd hello_kubernetes/Season01/Ep02/run
 
 ## Make Vagrantfile and create machines
 
+#### Check installation files
+
 ```
 $ cat Vagrantfile
     # -*- mode: ruby -*-
@@ -124,7 +126,7 @@ $ cat bootstrap.sh
     cat >>/etc/yum.repos.d/kubernetes.repo<<EOF
     [kubernetes]
     name=Kubernetes
-    baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x96_64
+    baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
     enabled=1
     gpgcheck=1
     repo_gpgcheck=1
@@ -185,8 +187,24 @@ $ cat bootstrap_kworker.sh
     sshpass -p "kubeadmin" scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
         kmaster.example.com:/joincluster.sh /joincluster.sh 2>/dev/null
     bash /joincluster.sh >/dev/null 2>&1
+```
 
+#### Installation
+
+```
 $ vagrant up
     < wait 1 or 2 minutes >
 
+```
+
+## Copy cluster config file to local
+
+```
+$ rm ~/.ssh/known_host
+$ mkdir ~/.kube
+$ scp vagrant@kmaster:.kube/config ~/.kube/config
+
+$ kubectl cluster-info
+$ kubectl version --short
+$ kubectl get nodes
 ```
