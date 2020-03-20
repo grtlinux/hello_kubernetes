@@ -177,6 +177,10 @@ $ cat bootstrap_kmaster.sh
     cp /etc/kubernetes/admin.conf /home/vagrant/.kube/config
     chown -R vagrant:vagrant /home/vagrant/.kube
 
+    # deploy flannel network
+    #echo "[TASK 3] deploy flannel network"
+    #su - vagrant -c "kubectl create -f https://github.com/coreos/flannel/blob/master/Documentation/kube-flannel.yml"
+
     # deploy calio network
     echo "[TASK 3] deploy calico network"
     su - vagrant -c "kubectl create -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml"
