@@ -210,6 +210,50 @@ $ vagrant up
 
 ```
 
+#### Check nodes
+```
+$ vagrant ssh kmaster
+    [vagrant@kmaster ~]$ nproc
+    [vagrant@kmaster ~]$ free -m
+    [vagrant@kmaster ~]$ df -h
+    [vagrant@kmaster ~]$ cat /etc/redhat-release
+    [vagrant@kmaster ~]$ cat /proc/cpuinfo
+    [vagrant@kmaster ~]$ fdisk -l
+    [vagrant@kmaster ~]$ ip a
+    [vagrant@kmaster ~]$ netstat -lntp
+    [vagrant@kmaster ~]$ ping google.com
+    [vagrant@kmaster ~]$ kubectl cluster-info
+    [vagrant@kmaster ~]$ kubectl version --short
+    [vagrant@kmaster ~]$ kubectl get nodes
+    [vagrant@kmaster ~]$ kubectl get namespaces
+    [vagrant@kmaster ~]$ logout
+
+$ vagrant ssh kworker1
+    [vagrant@kworker1 ~]$ nproc
+    [vagrant@kworker1 ~]$ free -m
+    [vagrant@kworker1 ~]$ df -h
+    [vagrant@kworker1 ~]$ cat /etc/redhat-release
+    [vagrant@kworker1 ~]$ cat /proc/cpuinfo
+    [vagrant@kworker1 ~]$ fdisk -l
+    [vagrant@kworker1 ~]$ ip a
+    [vagrant@kworker1 ~]$ netstat -lntp
+    [vagrant@kworker1 ~]$ ping google.com
+    [vagrant@kworker1 ~]$ logout
+
+$ vagrant ssh kworker2
+    [vagrant@kworker2 ~]$ nproc
+    [vagrant@kworker2 ~]$ free -m
+    [vagrant@kworker2 ~]$ df -h
+    [vagrant@kworker2 ~]$ cat /etc/redhat-release
+    [vagrant@kworker2 ~]$ cat /proc/cpuinfo
+    [vagrant@kworker2 ~]$ fdisk -l
+    [vagrant@kworker2 ~]$ ip a
+    [vagrant@kworker2 ~]$ netstat -lntp
+    [vagrant@kworker2 ~]$ ping google.com
+    [vagrant@kworker2 ~]$ logout
+```
+
+
 ## Copy cluster config file to local
 
 ```
@@ -223,23 +267,20 @@ $ kubectl get nodes
 $ kubectl get namespaces
 ```
 
+## about snapshot
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
+$ vagrant help snapshot
+$ vagrant snapshot list
+$ vagrant snapshot save kmaster kubernetes-kmaster-base
+$ vagrant snapshot save kworker1 kubernetes-kworker1-base
+$ vagrant snapshot save kworker2 kubernetes-kworker2-base
+$ vagrant snapshot list
+$ vagrant snapshot restore kmaster kubernetes-kmaster-base
+$ vagrant snapshot list
+$ vagrant snapshot delete kubernetes-kmaster-base
+$ vagrant snapshot list
+```
 
 
 
