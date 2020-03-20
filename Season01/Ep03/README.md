@@ -89,10 +89,11 @@ $ vagrant ssh
 # ----- added by Kiea -----
 alias kubectl='microk8s.kubectl'
 alias docker='microk8s.docker'
+# alias inspect='microk8s.inspect'
+# alias reset='microk8s.reset'
 EOF
     vagrant@ubuntuvm01:~$ logout
-```
-```
+
 $ vagrant ssh
     vagrant@ubuntuvm01:~$ cat .profile
     vagrant@ubuntuvm01:~$ alias | grep microk8s
@@ -104,46 +105,61 @@ $ vagrant ssh
     vagrant@ubuntuvm01:~$ ps -ef | grep docker
     vagrant@ubuntuvm01:~$ docker images
     vagrant@ubuntuvm01:~$ docker ps -a
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$ kubectl cluster-info
-    vagrant@ubuntuvm01:~$ kubectl version --short
-    vagrant@ubuntuvm01:~$ kubectl get nodes
-    vagrant@ubuntuvm01:~$ kubectl get namespaces
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
+
+    < window 1 >
+    vagrant@ubuntuvm01:~$ watch microk8s.kubectl get all --all-namespaces -o wide
+
+    < window 2 >
+    vagrant@ubuntuvm01:~$ kubectl run nginx --image nginx
+    vagrant@ubuntuvm01:~$ docker images
+    vagrant@ubuntuvm01:~$ docker ps -a
+    vagrant@ubuntuvm01:~$ kubectl scale deploy nginx --replicas=2
+
+    vagrant@ubuntuvm01:~$ kubectl expose deploy nginx --port 80 --target-port 80 --type ClusterIP
+    vagrant@ubuntuvm01:~$ curl http://<IP>
+    vagrant@ubuntuvm01:~$ sudo apt update && sudo apt install -y elinks
+    vagrant@ubuntuvm01:~$ elinks <IP>
+
+    vagrant@ubuntuvm01:~$ microk8s.reset
+    vagrant@ubuntuvm01:~$ microk8s.enable dashboard
+    vagrant@ubuntuvm01:~$ microk8s.disable dashboard
+    vagrant@ubuntuvm01:~$ logout
+```
+
+#### insufficient memory
+```
+$ cat Vagrantfile
+    .....
+            v.memory = 1024
+    .....
+$ vagrant up
+
+$ vagrant ssh
+    vagrant@ubuntuvm01:~$ sudo apt install snapd
+    vagrant@ubuntuvm01:~$ sudo snap install microk8s --classic --channel=1.13/stable
+    vagrant@ubuntuvm01:~$ snap list
+    vagrant@ubuntuvm01:~$ microk8s.kubectl cluster-info
+    vagrant@ubuntuvm01:~$ sudo usermod -a -G microk8s vagrant
+    vagrant@ubuntuvm01:~$ cat >>~/.profile <<EOF
+# ----- added by Kiea -----
+alias kubectl='microk8s.kubectl'
+alias docker='microk8s.docker'
+# alias inspect='microk8s.inspect'
+# alias reset='microk8s.reset'
+EOF
+    < window 1 >
+    vagrant@ubuntuvm01:~$ watch microk8s.kubectl get all --all-namespaces -o wide
+
+    < window 2 >
+    vagrant@ubuntuvm01:~$ kubectl run nginx --image nginx
+    vagrant@ubuntuvm01:~$ kubectl describe pod nginx-XXXXXXXX-XXXXX | less
+        Events:
+            ..... Fail
+    vagrant@ubuntuvm01:~$ kubectl describe node ubuntuvm01
+        Taints:   .... NoSchedule
+        Conditions:
+            ..... False
+    vagrant@ubuntuvm01:~$ kubectl describe node ubuntuvm01 | grep Taints
     vagrant@ubuntuvm01:~$
     vagrant@ubuntuvm01:~$ logout
 
