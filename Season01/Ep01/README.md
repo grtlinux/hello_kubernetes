@@ -198,6 +198,7 @@ EOF
 ```
 
 #### Enable ssh password authentication
+
 ```
     # sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' \
         /etc/ssh/sshd_config
@@ -283,6 +284,18 @@ $ tree ~/.vagrant.d
 $ cd ../../../..
 $ rm -rf hello_kubernetes
 ```
+
+#### Delete VM on VirtualBox
+```
+$ vboxmanage --version
+$ vboxmanage list vms
+$ vboxmanage list runningvms
+$ vboxmanage controlvm <VM> poweroff
+$ vboxmanage unregistervm <VM> --delete
+```
+
+
+
 
 ---
 
