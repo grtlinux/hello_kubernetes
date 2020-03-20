@@ -216,6 +216,7 @@ $ scp vagrant@kmaster:.kube/config ~/.kube/config
 $ kubectl cluster-info
 $ kubectl version --short
 $ kubectl get nodes
+$ kubectl get namespaces
 ```
 
 

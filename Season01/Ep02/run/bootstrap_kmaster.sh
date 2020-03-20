@@ -10,9 +10,13 @@ mkdir /home/vagrant/.kube
 cp /etc/kubernetes/admin.conf /home/vagrant/.kube/config
 chown -R vagrant:vagrant /home/vagrant/.kube
 
+# deploy flannel network
+echo "[TASK 3] deploy flannel network"
+su - vagrant -c "kubectl create -f /vagrant/kube-flannel.yaml"
+
 # deploy calio network
-echo "[TASK 3] deploy calico network"
-su - vagrant -c "kubectl create -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml"
+#echo "[TASK 3] deploy calico network"
+#su - vagrant -c "kubectl create -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml"
 
 # generate cluster join command
 echo "[TASK 4] generate and save cluster join command to /joincluster.sh"
