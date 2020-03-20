@@ -92,7 +92,7 @@ $ kubectl get namespaces
 $ kubectl get all --all-namespaces
 
 < window 1 >
-$ watch get all -o wide
+$ watch kubectl get all -o wide
 
 < window 2 >
 $ kubectl run myshell --rm -it --image busybox -- sh
@@ -103,7 +103,8 @@ $ kubectl config view
 $ minikube stop
 $ minikube status
 $ minikube delete
-$ cd .minikube
+$ cd ~/.minikube
+$ ls -al
 $ cd ..
 $ rm -rf .minikube
 ```
@@ -124,7 +125,7 @@ $ minikube dashboard
 $ curl http://127.0.0.1:35035/api/v1/namespaces/kube-system/services/http:kubernetes-dashboard:/proxy/
 
 $ minikube delete
-$ rm -rf .minikube
+$ rm -rf ~/.minikube
 $ rm -rf ~/.kube
 $ sudo rm -rf /usr/local/bin/minikube
 $ sudo rm -rf /usr/local/bin/kubectl
