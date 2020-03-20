@@ -17,6 +17,50 @@
 
 
 
+
+
+
+
+
+
+
+
+
+## Poweroff and Delete the virtual machines
+
+```
+$ vboxmanage list vms
+$ vboxmanage list runningvms
+$ vagrant halt
+$ vboxmanage list runningvms
+$ vagrant destroy -f
+$ vboxmanage list vms
+$ vagrant status
+```
+
+## Remove vagrant box
+
+```
+$ vagrant box remove --all centos/7
+$ vagrant box list
+$ tree ~/.vagrant.d
+$ cd ../../../..
+$ rm -rf hello_kubernetes
+```
+
+#### Delete VM on VirtualBox
+
+```
+$ vboxmanage --version
+$ vboxmanage list vms
+$ vboxmanage list runningvms
+$ vboxmanage controlvm <VM> poweroff
+$ vboxmanage unregistervm <VM> --delete
+```
+
+
+
+
 ---
 
 Have Fun!!
