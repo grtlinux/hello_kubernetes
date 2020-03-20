@@ -8,6 +8,19 @@
 |Vagrant|1.0|
 |VirtualBox|6.0|
 
+## Assumptions
+|Role|FQDN|IP|OS|RAM|CPU|
+|----|----|----|----|----|----|
+|Master|kmaster.example.com|172.42.42.100|CentOS 7|2G|2|
+|Worker1|kworker1.example.com|172.42.42.101|CentOS 7|1G|1|
+
+## Get Git information
+```
+$ mkdir play && cd $_
+$ git clone https://github.com/grtlinux/hello_kubernetes.git
+$ cd hello_kubernetes/Season01/Ep04/run
+```
+
 - git
 - docker
 - vagrant

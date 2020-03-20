@@ -23,29 +23,110 @@ This documentation guides you in setting up a cluster with one master node and o
 ```
 $ mkdir play && cd $_
 $ git clone https://github.com/grtlinux/hello_kubernetes.git
-$ cd hello_kubernetes/Season01/Ep01/run
+$ cd hello_kubernetes/Season01/Ep04/run
 ```
 
-# Ep00. Install Tools
+## Installation of kubectl
 
-## Ready
-|Preinstall|Version|
-|----|----|
-|Vagrant|1.0|
-|VirtualBox|6.0|
+Search 'install kubectl' on Google Chrome
 
-- git
-- docker
-- vagrant
-- virtualbox
-- tree
-- etc
+#### install kubectl with curl
 
+```
+$ sudo apt-get update && sudo apt-get install -y apt-transport-https
+$ curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
+$ curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+$ curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.17.0/bin/linux/amd64/kubectl
+$ chmod +x ./kubectl
+$ sudo mv ./kubectl /usr/local/bin/kubectl
+$ which kubectl
+$ kubectl version --client
+```
 
+#### install kubectl with apt-get
 
+```
+$ sudo apt-get update && sudo apt-get install -y apt-transport-https
+$ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+$ echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+$ sudo apt-get update
+$ sudo apt-get install -y kubectl
+$ which kubectl
+$ kubectl version --client
+```
 
+## Installation of minikube
 
+Search 'install minikube' on Google Chrome
 
+#### install minikube with curl
+
+```
+$ curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+$ chmod +x minikube
+$ sudo mv ./minikube /usr/local/bin/minikube
+$ which minikube
+$ minikube version
+```
+
+## Create minikube-cluster
+
+```
+$ minikube help | less
+$ minikube status
+$ minikube start [--kubernetes-version v1.13.0] [--cpus 1] [--memory 1024]
+$ minikube status
+$ minikube ip
+$ minikube logs | less
+$ minikube ssh
+    $ sudo docker images
+    $ sudo docker ps -a
+    $ logout
+
+$ kubectl cluster-info
+$ kubectl version --short
+$ kubectl get nodes -o wide
+$ kubectl get namespaces
+$ kubectl get all --all-namespaces
+
+< window 1 >
+$ watch get all -o wide
+
+< window 2 >
+$ kubectl run myshell --rm -it --image busybox -- sh
+    / # ping google.com
+    / # exit
+$ kubectl config view
+
+$ minikube stop
+$ minikube status
+$ minikube delete
+$ cd .minikube
+$ cd ..
+$ rm -rf .minikube
+```
+
+```
+$ minikube start [--kubernetes-version v1.13.0] [--cpus 1] [--memory 1024]
+$ minikube status
+$ minikube ip
+$ kubectl cluster-info
+$ kubectl version --short
+$ kubectl get no
+$ kubectl get ns
+
+< window 1 >
+$ minikube dashboard
+
+< window 2 >
+$ curl http://127.0.0.1:35035/api/v1/namespaces/kube-system/services/http:kubernetes-dashboard:/proxy/
+
+$ minikube delete
+$ rm -rf .minikube
+$ rm -rf ~/.kube
+$ sudo rm -rf /usr/local/bin/minikube
+$ sudo rm -rf /usr/local/bin/kubectl
+```
 
 
 
