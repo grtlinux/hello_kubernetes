@@ -31,6 +31,8 @@ $ cd hello_kubernetes/Season01/Ep03/run
 #### check vagrant file
 ```
 $ cd ubuntu18
+```
+```
 $ cat Vagrantfile
     # -*- mode: ruby -*-
     # vi: set ft=ruby :
@@ -71,9 +73,9 @@ $ vagrant ssh
     vagrant@ubuntuvm01:~$ nproc
     vagrant@ubuntuvm01:~$ free -m
     vagrant@ubuntuvm01:~$ df -h
-    vagrant@ubuntuvm01:~$ cat /etc/redhat-release
+    vagrant@ubuntuvm01:~$ cat /etc/lsb-release
     vagrant@ubuntuvm01:~$ cat /proc/cpuinfo
-    vagrant@ubuntuvm01:~$ fdisk -l
+    vagrant@ubuntuvm01:~$ sudo fdisk -l
     vagrant@ubuntuvm01:~$ ip a
     vagrant@ubuntuvm01:~$ netstat -lntp
     vagrant@ubuntuvm01:~$ ping google.com
@@ -82,25 +84,33 @@ $ vagrant ssh
     vagrant@ubuntuvm01:~$ sudo snap install microk8s --classic --channel=1.13/stable
     vagrant@ubuntuvm01:~$ snap list
     vagrant@ubuntuvm01:~$ microk8s.kubectl cluster-info
-    vagrant@ubuntuvm01:~$ microk8s.kubectl version --short
-    vagrant@ubuntuvm01:~$ alias kubectl='microk8s.kubectl'
+    vagrant@ubuntuvm01:~$ sudo usermod -a -G microk8s vagrant
+    vagrant@ubuntuvm01:~$ cat >>~/.profile <<EOF
+# ----- added by Kiea -----
+alias kubectl='microk8s.kubectl'
+alias docker='microk8s.docker'
+EOF
+    vagrant@ubuntuvm01:~$ logout
+```
+```
+$ vagrant ssh
+    vagrant@ubuntuvm01:~$ cat .profile
+    vagrant@ubuntuvm01:~$ alias | grep microk8s
     vagrant@ubuntuvm01:~$ kubectl version --short
     vagrant@ubuntuvm01:~$ kubectl get nodes -o wide
     vagrant@ubuntuvm01:~$ kubectl get namespaces
 
     vagrant@ubuntuvm01:~$ dpkg -l | grep docker
     vagrant@ubuntuvm01:~$ ps -ef | grep docker
+    vagrant@ubuntuvm01:~$ docker images
+    vagrant@ubuntuvm01:~$ docker ps -a
     vagrant@ubuntuvm01:~$
     vagrant@ubuntuvm01:~$
     vagrant@ubuntuvm01:~$
     vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$ sudo apt install docker.io
     vagrant@ubuntuvm01:~$
     vagrant@ubuntuvm01:~$
     vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$
-    vagrant@ubuntuvm01:~$ sudo usermod -a -G microk8s vagrant
     vagrant@ubuntuvm01:~$
     vagrant@ubuntuvm01:~$
     vagrant@ubuntuvm01:~$
