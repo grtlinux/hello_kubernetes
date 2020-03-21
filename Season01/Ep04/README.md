@@ -141,33 +141,78 @@ $ vagrant up
 
 $ vagrant ssh
     $
-    $ sudo apt-get update && sudo apt-get install -y apt-transport-https
-    $ curl -LO \
-        https://storage.googleapis.com/kubernetes-release/release/v1.17.0/bin/linux/amd64/kubectl
-    $ chmod +x ./kubectl
-    $ sudo mv ./kubectl /usr/local/bin/kubectl
-    $ which kubectl
-    $ kubectl version --client
-
-    $ curl -Lo minikube \
-        https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-    $ chmod +x minikube
-    $ sudo mv ./minikube /usr/local/bin/minikube
-    $ which minikube
-    $ minikube version
-
     $ sudo apt update && sudo apt upgrade
     $ sudo apt install -y docker.io
     $ sudo systemctl enable docker
     $ sudo systemctl start docker
     $ sudo systemctl status docker
 
-    $ minikube start --vm-driver=docker
+    $ sudo apt-get update && sudo apt-get install -y apt-transport-https
+    $ curl -LO \
+        https://storage.googleapis.com/kubernetes-release/release/v1.17.0/bin/linux/amd64/kubectl
+    $ chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin/kubectl
+    $ which kubectl
+    $ kubectl version --client --short
+
+    $ curl -Lo minikube \
+        https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    $ chmod +x minikube && sudo mv ./minikube /usr/local/bin/minikube
+    $ which minikube
+    $ minikube version
+
+    $ minikube start --vm-driver=docker [--kubernetes-version v1.13.0] [--cpus 1] [--memory 1024]
     $ minikube status
+    $ minikube ip
+    $ minikube logs | less
+    $ minikube ssh
+        $ sudo docker images
+        $ sudo docker ps -a
+        $ logout
 
+    $ kubectl cluster-info
+    $ kubectl version --short
+    $ kubectl get no
+    $ kubectl get ns
 
+    $ minikube stop
+    $ minikube delete
+    $ minikube status
+    $ rm -rf ~/.minikube
+    $ rm -rf ~/.kube
+    $ sudo rm -rf /usr/local/bin/minikube
+    $ sudo rm -rf /usr/local/bin/kubectl
+    $ rm -rf .minikube
 
+```
 
+```
+$ minikube start
+    -> machine does not exist
+$ minikube delete
+$ sudo su -
+# minikube start --vm-driver=[docker|none]
+# minikube status
+.....
+# minikube addons list
+# minikube addons enable dashboard
+# kubectl -n kube-system get pods
+# minikube dashboard --url
+
+< other system >
+$ ssh -L 8080:localhost:42532 ec2-user@10.52.100.123
+< check the url on browser >
+
+```
+
+## AWS
+
+```
+$ grep -E --color 'vmx|svm' /proc/cpuinfo
+$ sudo amazon-linux-extras install -y docker
+$ sudo systemctl status docker
+$ sudo systemctl enable --now docker
+$ sudo systemctl status docker
+$ sudo gpasswd -a ec2-user docker
 ```
 
 
