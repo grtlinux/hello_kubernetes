@@ -82,7 +82,13 @@ $ vagrant up
 ---
 
 ```
-$
+$ cd ../dashbaord
+$ watch kubectl get all --all-namespaces
+$ kubectl create -f influxdb.yaml
+$ kubectl create -f heapster.yaml
+$ kubectl create -f dashboard.yaml
+$ kubectl create -f sa_cluster_admin.yaml
+
 ```
 
 
