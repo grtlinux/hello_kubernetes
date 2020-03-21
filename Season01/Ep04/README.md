@@ -76,7 +76,7 @@ $ minikube version
 ```
 $ minikube help | less
 $ minikube status
-$ minikube start [--kubernetes-version v1.13.0] [--cpus 1] [--memory 1024]
+$ minikube start [--kubernetes-version v1.13.0] [--cpus 1] [--memory 1024] [--vm-driver=docker]
 $ minikube status
 $ minikube ip
 $ minikube logs | less
@@ -149,11 +149,21 @@ $ vagrant ssh
     $ which kubectl
     $ kubectl version --client
 
-    $ curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    $ curl -Lo minikube \
+        https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
     $ chmod +x minikube
     $ sudo mv ./minikube /usr/local/bin/minikube
     $ which minikube
     $ minikube version
+
+    $ sudo apt update && sudo apt upgrade
+    $ sudo apt install -y docker.io
+    $ sudo systemctl enable docker
+    $ sudo systemctl start docker
+    $ sudo systemctl status docker
+
+    $ minikube start --vm-driver=docker
+    $ minikube status
 
 
 
