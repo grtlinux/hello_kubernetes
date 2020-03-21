@@ -78,6 +78,30 @@ $ vagrant up
     < wait 1 or 2 minutes >
 ```
 
+## Kubernetes Dashboard
+```
+$ kubectl apply -f \
+    https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml
+$ kubectl proxy
+{
+  browser url:
+    http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+  ssl-tunneling:
+    $ ssh -p 22222 -L 8001:localhost:8001 kiea@grtlinux11.iptime.org
+}
+$ kubectl create -f sa_cluster_admin.yaml
+$ kubectl get sa -n kube-system
+$ kubectl describe sa dashboard-admin -n kube-system
+    .....
+    Mountable secrets: dashboard-admin-token-vjz7n
+    .....
+$ kubectl describe secret dashboard-admin-token-vjz7n -n kube-system
+    .....
+    token: XXXXXXXXX-COPY-XXXXXXXXXXXX
+$
+
+```
+
 ## command
 ```
 $
