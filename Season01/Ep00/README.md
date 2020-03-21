@@ -13,12 +13,13 @@
 |----|----|----|----|----|----|
 |Master|kmaster.example.com|172.42.42.100|CentOS 7|2G|2|
 |Worker1|kworker1.example.com|172.42.42.101|CentOS 7|1G|1|
+|Worker2|kworker2.example.com|172.42.42.102|CentOS 7|1G|1|
 
 ## Get Git information
 ```
 $ mkdir play && cd $_
 $ git clone https://github.com/grtlinux/hello_kubernetes.git
-$ cd hello_kubernetes/Season01/Ep04/run
+$ cd hello_kubernetes/Season01/Ep00/run0
 ```
 
 ## Useful tools
@@ -53,7 +54,7 @@ $ cat Vagrantfile
         end
     end
 
-    NodeCount = 1
+    NodeCount = 2
     # Kubernetes Worker Nodes
     (1..NodeCount).each do |i|
         config.vm.define "kworker#{i}" do |workernode|
