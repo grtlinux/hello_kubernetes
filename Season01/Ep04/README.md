@@ -131,7 +131,34 @@ $ sudo rm -rf /usr/local/bin/minikube
 $ sudo rm -rf /usr/local/bin/kubectl
 ```
 
+## Single node kubernetes with Minikube
 
+```
+$ mkdir play && cd $_
+$ git clone https://github.com/grtlinux/hello_kubernetes.git
+$ cd hello_kubernetes/Season01/Ep04/run0
+$ vagrant up
+
+$ vagrant ssh
+    $
+    $ sudo apt-get update && sudo apt-get install -y apt-transport-https
+    $ curl -LO \
+        https://storage.googleapis.com/kubernetes-release/release/v1.17.0/bin/linux/amd64/kubectl
+    $ chmod +x ./kubectl
+    $ sudo mv ./kubectl /usr/local/bin/kubectl
+    $ which kubectl
+    $ kubectl version --client
+
+    $ curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    $ chmod +x minikube
+    $ sudo mv ./minikube /usr/local/bin/minikube
+    $ which minikube
+    $ minikube version
+
+
+
+
+```
 
 
 
