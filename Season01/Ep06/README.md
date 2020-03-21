@@ -104,9 +104,33 @@ $
 
 ## command
 ```
+$ watch kubectl get all -o wide
+
+$ kubectl run myshell -it --image busybox -- sh
+$ kubectl delete myshell
+$ kubectl run myshell --rm -it --image busybox -- sh
+
+$ kubectl run mynginx --image nginx
+$ kubectl delete mynginx
+$ kubectl run mynginx --image nginx
+$ kubectl port-forward nginx-dbddb74b8-xxxx 8080:80
+{
+    tunnel: ssh -p 22222 -L 8080:localhost:8080 kiea@grtlinux11.iptime.org
+    browser url: http://localhost:8080/
+}
+$ kubectl logs nginx-dbddb74b8-xxxx
 $
 $
 $
+$
+$
+$
+$
+$
+$
+$
+$
+
 ```
 
 
