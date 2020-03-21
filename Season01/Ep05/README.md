@@ -99,6 +99,15 @@ $
 
 
 
+
+
+
+
+
+
+
+---
+
 ## Poweroff and Delete the virtual machines
 
 ```
