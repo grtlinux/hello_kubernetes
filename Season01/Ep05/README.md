@@ -111,7 +111,7 @@ $ kubectl get nodes
 $ kubectl get namespaces
 $ kubectl get all --all-namespaces -o wide
 
-$ kubectl apply -f
+$ kubectl apply -f \
     https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml
 $ kubectl proxy [--help]
 < browser url: http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/ >
@@ -130,8 +130,7 @@ $ kubectl -n kubernetes-dashboard edit svc kubernetes-dashboard
 $ kubectl -n kubernetes-dashboard get sa
 $ kubectl -n kubernetes-dashboard describe sa kubernetes-dashboard
 $ kubectl -n kubernetes-dashboard describe secret kubernetes-dashboard-token-zfzp7
-
-eyJhbGciOiJSUzI1NiIsImtpZCI6IjV5V3RiRDBuUWlLTkpSTnBMeVhvR29vYk5GN0VlU2JPRFJEWXJJdkM1aFkifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZC10b2tlbi16ZnpwNyIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6ImEyNjM4YzY2LWUwNWQtNDM1OC04NTY1LTMwZGYyNjZjNzk1OSIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDprdWJlcm5ldGVzLWRhc2hib2FyZDprdWJlcm5ldGVzLWRhc2hib2FyZCJ9.Z6W2cCNWBipvfiQ5X1mROxBr4laoX2NKZ2tCT1fMevohp6_r72hWm72luYB9aK3BemOgKjevXNrMja_aD4HyI43e25Jb2kF7s0kmyDKIkxiLT2aZHbNzDfIg2q5R9cRQPs8NhrhyrWaCT5iJjaTr-qndtv5SjQY7sp6bOHWp0xrXSFRZ6kf9C6ADKrBT61bRl6JR5M-w2PKshwYv2XglmYi4zi_Nl1fv5xeOINwWS_0YANfSzOS_4jRxbB-ruftbgPmBkDqh9zLPCilCx8qWHiG5bXjpt-LkJmRFvC-Who7C07afXU9ErZM9zpMF3PiAhInHZUxYX2AU8DGL0qhfGA
+    token: XXXXXXXXXXXXXXXXXXXXX
 
 $ kubectl -n kubernetes-dashboard
 $ kubectl -n kubernetes-dashboard
