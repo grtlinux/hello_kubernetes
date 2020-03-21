@@ -87,7 +87,19 @@ $ watch kubectl get all --all-namespaces
 $ kubectl create -f influxdb.yaml
 $ kubectl create -f heapster.yaml
 $ kubectl create -f dashboard.yaml
+$ kubectl cluster-info
+
+< browser url: http://kworker1:32323/ >
+
 $ kubectl create -f sa_cluster_admin.yaml
+$ kubectl -n kube-system describe sa dashboard-admin
+    .....
+    Mountable secrets: dashboard-admin-token-vjz7n
+    .....
+$ kubectl -n kube-system describe secret dashboard-admin-token-vjz7n
+    token: XXXXXXXXXXXXXXXXXXXXX
+
+< use the token in token text on browser >
 
 ```
 
