@@ -78,19 +78,35 @@ $ vagrant up
     < wait 1 or 2 minutes >
 ```
 
-## DaemonSets
+## DaemonSet
 ```
-$
-$
-$
-$
-$
-$
-$
-$
-$
-$
-$
+$ watch kubectl get all -o wide
+$ cat 1-nginx-daemonset.yaml
+    apiVersion: apps/v1
+    kind: DaemonSet
+    metadata:
+      name: nginx-daemonset
+    spec:
+      selector:
+        matchLabels:
+          demotype: nginx-daemonset-demo
+      template:
+        metadata:
+          labels:
+            demotype: nginx-daemonset-demo
+        spec:
+          containers:
+          - image: nginx
+            name: nginx
+$ kubectl apply -f 1-nginx-daemonset.yaml
+$ kubectl get event
+$ kubectl describe daemonset nginx-daemonset
+$ kubectl describe daemonset nginx-daemonset -o yaml > /tmp/imsi-daemonset.yaml
+$ vi /tmp/imsi-daemonset.yaml
+$ kubectl apply -f /tmp/imsi-daemonset.yaml
+$ kubectl delete -f /tmp/imsi-daemonset.yaml
+$ kubectl delete daemonset nginx-daemonset
+$ kubectl delete -f 1-nginx-daemonset.yaml
 ```
 
 
