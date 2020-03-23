@@ -103,7 +103,130 @@ $ kubectl proxy
 ```
 
 
+## Pod
+```
+$ watch kubectl get all -o wide
+$ cat 1-nginx-pod.yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: nginx
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+$ kubectl apply -f 1-nginx-pod.yaml
+$ kubectl get event
+$ kubectl describe pod nginx
+$ kubectl describe pod nginx -o yaml > /tmp/imsi-pod.yaml
+$ vi /tmp/imsi-pod.yaml
+$ kubectl apply -f /tmp/imsi-pod.yaml
+$ kubectl delete -f /tmp/imsi-pod.yaml
+$ kubectl delete pod nginx
+$ kubectl delete -f 1-nginx-pod.yaml
+```
 
+## ReplicaSet
+```
+$ watch kubectl get all -o wide
+$ cat 1-nginx-replicaset.yaml
+    apiVersion: apps/v1
+    kind: ReplicaSet
+    metadata:
+      labels:
+        run: nginx
+      name: nginx-replicaset
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          run: nginx
+      template:
+        metadata:
+          labels:
+            run: nginx
+        spec:
+          containers:
+          - image: nginx
+            name: nginx
+$ kubectl apply -f 1-nginx-replicaset.yaml
+$ kubectl get event
+$ kubectl describe pod nginx-XXXXX | grep -i controlled
+$ kubectl describe replicaset nginx-replicaset
+$ kubectl describe replicaset nginx-replicaset -o yaml > /tmp/imsi-replicaset.yaml
+$ vi /tmp/imsi-replicaset.yaml
+$ kubectl apply -f /tmp/imsi-replicaset.yaml
+$ kubectl delete -f /tmp/imsi-replicaset.yaml
+$ kubectl delete replicaset nginx-replicaset
+$ kubectl delete -f 1-nginx-replicaset.yaml
+```
+
+## Deployment
+```
+$ watch kubectl get all -o wide
+$ cat 1-nginx-deployment.yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        run: nginx
+      name: nginx-deploy
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          run: nginx
+      template:
+        metadata:
+          labels:
+            run: nginx
+        spec:
+          containers:
+          - image: nginx
+            name: nginx
+$ kubectl apply -f 1-nginx-deployment.yaml
+$ kubectl get event
+$ kubectl describe pod nginx-XXXXX-XXXX | grep -i controlled
+$ kubectl describe replicaset nginx-XXXXX | grep -i controlled
+$ kubectl describe deployment nginx-deploy
+$ kubectl describe deployment nginx-deploy -o yaml > /tmp/imsi-deployment.yaml
+$ vi /tmp/imsi-deployment.yaml
+$ kubectl apply -f /tmp/imsi-deployment.yaml
+$ kubectl delete -f /tmp/imsi-deployment.yaml
+$ kubectl delete deployment nginx-deploy
+$ kubectl delete -f 1-nginx-deployment.yaml
+```
+
+## DaemonSet
+```
+$ watch kubectl get all -o wide
+$ cat 1-nginx-daemonset.yaml
+    apiVersion: apps/v1
+    kind: DaemonSet
+    metadata:
+      name: nginx-daemonset
+    spec:
+      selector:
+        matchLabels:
+          demotype: nginx-daemonset-demo
+      template:
+        metadata:
+          labels:
+            demotype: nginx-daemonset-demo
+        spec:
+          containers:
+          - image: nginx
+            name: nginx
+$ kubectl apply -f 1-nginx-daemonset.yaml
+$ kubectl get event
+$ kubectl describe daemonset nginx-daemonset
+$ kubectl describe daemonset nginx-daemonset -o yaml > /tmp/imsi-daemonset.yaml
+$ vi /tmp/imsi-daemonset.yaml
+$ kubectl apply -f /tmp/imsi-daemonset.yaml
+$ kubectl delete -f /tmp/imsi-daemonset.yaml
+$ kubectl delete daemonset nginx-daemonset
+$ kubectl delete -f 1-nginx-daemonset.yaml
+```
 
 
 ---
