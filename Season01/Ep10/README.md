@@ -78,8 +78,16 @@ $ vagrant up
     < wait 1 or 2 minutes >
 ```
 
-## command
+## DaemonSets
 ```
+$
+$
+$
+$
+$
+$
+$
+$
 $
 $
 $
