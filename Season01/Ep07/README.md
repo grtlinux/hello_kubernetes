@@ -228,6 +228,14 @@ $ kubectl delete daemonset nginx-daemonset
 $ kubectl delete -f 1-nginx-daemonset.yaml
 ```
 
+## Test Pod kube-proxy-XXXX in Namespace kube-system
+```
+$ kubectl -n kube-system describe pod kube-proxy-XXXXX -o yaml > /tmp/imsi-proxy.yaml
+$ vi /tmp/imsi-proxy.yaml
+$ kubectl apply -f /tmp/imsi-proxy.yaml
+$ kubectl get all --all-namespaces -o wide
+$ kubectl delete -f /tmp/imsi-proxy.yaml
+```
 
 ---
 ## command
