@@ -136,7 +136,10 @@ $ kubectl delete namespace demo
 $ kubectl config delete-context demo
 ```
 
-
+```
+$ alias kcc='kubectl config current-context '
+$ alias kuc='kubectl config use-context '
+```
 
 
 
