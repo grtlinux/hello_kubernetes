@@ -1,8 +1,6 @@
 
 # Hello Kubernetes Season 01
 
-- [Ep00. XXX](https://github.com/grtlinux/hello_kubernetes/blob/master/Season01/Ep00/README.md)
-
 - [Ep01. Setup Kubernetes Cluster using kubeadm on CentOS 7](https://github.com/grtlinux/hello_kubernetes/blob/master/Season01/Ep01/README.md)
 - [Ep02. Setup Kubernetes Cluster with Vagrant](https://github.com/grtlinux/hello_kubernetes/blob/master/Season01/Ep02/README.md)
 - [Ep03. Kubernetes single node cluster using microk8s](https://github.com/grtlinux/hello_kubernetes/blob/master/Season01/Ep03/README.md)
@@ -24,6 +22,60 @@
 - [Ep19. Performing Rolling Updates in Kubernetes](https://github.com/grtlinux/hello_kubernetes/blob/master/Season01/Ep19/README.md)
 - [Ep20. NFS Persistent Volume in Kubernetes Cluster](https://github.com/grtlinux/hello_kubernetes/blob/master/Season01/Ep20/README.md)
 - [Ep21. How to use Statefulsets in Kubernetes Cluster](https://github.com/grtlinux/hello_kubernetes/blob/master/Season01/Ep21/README.md)
+- [Ep22. How to upgrade your Kubernetes Cluster](https://github.com/grtlinux/hello_kubernetes/blob/master/Season01/Ep22/README.md)
+- [Ep23. Dynamically provision NFS persistent volumes in Kubernetes](https://github.com/grtlinux/hello_kubernetes/blob/master/Season01/Ep23/README.md)
+- [Ep24. Getting started with Helm in Kubernetes Cluster](https://github.com/grtlinux/hello_kubernetes/blob/master/Season01/Ep24/README.md)
+
+```
+        *[Kube 7] Kubernetes Pods Replicasets & Deployments
+        *[Kube 8] Kubernetes Namespaces & Contexts
+        *[Kube 9] How to use Node Selector in Kubernetes
+        *[Kube 9.1] PodNodeSelector Admission Control Plugin | Assigning pods to nodes
+        *[Kube 10] Kubernetes DaemonSets
+        *[Kube 11] Jobs & Cronjobs in Kubernetes Cluster
+        *[Kube 11.1] Deleting Jobs in Kubernetes after completion using feature gate TTLAfterFinished
+        *[Kube 12] Init Containers in Kubernetes Cluster
+        *[Kube 13] Using Persistent Volumes and Claims in Kubernetes Cluster
+        *[Kube 14] Using Secrets in Kubernetes
+        *[Kube 15] Using ConfigMaps in Kubernetes Cluster
+        *[Kube 16] Using Resource Quotas & Limits in Kubernetes Cluster
+        *[Kube 17] Renaming Kubernetes Nodes
+        *[Kube 18] How to setup Rancher to manage your Kubernetes Cluster
+        *[Kube 18 Discussion 1] Rancher issues with Calico
+        *[Kube 18.1] Monitoring Kubernetes Cluster with Rancher v2
+        *[Kube 18.2] Kubernetes Logging with Rancher, Fluentd and Elastic Stack
+        *[Kube 19] Performing Rolling Updates in Kubernetes
+        *[Kube 20] NFS Persistent Volume in Kubernetes Cluster
+        *{Kube 21] How to use Statefulsets in Kubernetes Cluster
+        *[Kube 22] How to upgrade your Kubernetes Cluster
+        *[Kube 23] Dynamically provision NFS persistent volumes in Kubernetes
+        *[Kube 24] Getting started with Helm in Kubernetes Cluster
+        *[Kube 24 Discussion 1] How to make Helm work with Kubernetes v1.16
+        *[Kube 24.1] Helm v3.0 released | How to migrate from v2
+        *[Kube 25] Running Jenkins in Kubernetes Cluster using Helm
+        *[Kube 25 Discussion 1] Configuring Jenkins to connect to Kubernetes cluster
+        *[Kube 26] Prometheus monitoring for Kubernetes Cluster and Grafana visualization
+         [Kube 27 GKE 1] Using gcloud CLI and Google Cloud Console
+         [Kube 28 GKE 2] Creating your first Kubernetes cluster in GKE
+         [Kube 29 GKE 3] Deploying an app in GKE Cluster
+        *[Kube 30] Deploying Kubernetes Cluster using LXC Containers
+        *[Kube 30.1] Kubernetes 1.17 on LXC Containers
+        *[Kube 31] Set up Nginx Ingress in Kubernetes Bare Metal       (haproxy)
+        *[Kube 32] Set up Traefik Ingress on kubernetes Bare Metal Cluster
+        *[Kube 33] Set up MetalLB Load Balancing for Bare Metal Kubernetes
+        *[Kube 34] Monitor Kubernetes Logs using EFK stack - Elasticsearch, FluentBit & Kibana
+        *[Kube 34 Discussion 1] Customizing EFK Deployment in Kubernetes using Rancher
+        *[Kube 35] Using Horizontal Pod Autoscaler in Kubernetes
+        *[Kube 35 Discussion 1] Pod auto-scaling based on memory utilization
+        *[Kube 35.1] Deploying metrics-server in Kubernetes using Helm
+        *[Kube 36] Useful Kubernetes Tools - kube-ops-view and kubebox
+        *[Kube 37] Setup Lets Encrypt cert-manager in Kubernetes Bare Metal
+        *[Kube 38] Kubernetes The Hard Way - Part 1
+        *[Kube 39] Kubernetes The Hard Way - Part 2
+        *[Kube 40] Kubernetes The Hard Way HA Testing
+        *[Kube 41] Deploying NextCloud in Kubernetes
+```
+
 
 ---
 
