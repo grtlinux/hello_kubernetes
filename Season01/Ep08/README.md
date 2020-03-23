@@ -93,6 +93,8 @@ $ kubectl get pods
 $ kubectl config use-context kubesys
 $ kubectl config current-context
 $ kubectl get pods
+$ kubectl config use-context kubernetes-admin@kubernetes
+$ kubectl config get-contexts
 ```
 
 ```
