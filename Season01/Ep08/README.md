@@ -78,11 +78,62 @@ $ vagrant up
     < wait 1 or 2 minutes >
 ```
 
-## command
+## Namespace and Context
 ```
-$
-$
-$
+$ kubectl get pods
+$ kubectl config view
+$ kubectl config get-contexts
+$ kubectl config current-context
+$ kubectl config set-context kubesys \
+    --namespace=kube-system \
+    --user=kubernetes-admin \
+    --cluster=kubernetes
+$ kubectl config get-contexts
+$ kubectl get pods
+$ kubectl config use-context kubesys
+$ kubectl config current-context
+$ kubectl get pods
+```
+
+```
+$ kubectl create namespace demo
+$ kubectl get ns
+$ kubectl config view
+$ kubectl config set-context demo \
+    --namespace=demo \
+    --user=kubernetes-admin \
+    --cluster=kubernetes
+$ kubectl config get-contexts
+$ kubectl config use-context demo
+$ kubectl config current-context
+$ kubectl get pods
+$ kubectl create -f 1-nginx-pod.yaml
+$ kubectl get pods
+$ kubectl delete -f 1-nginx-pod.yaml
+$ kubectl delete namespace demo
+$ kubectl config delete-context demo
+```
+
+```
+$ cat 1-nginx-namespace.yaml
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: demo-nginx
+$ kubectl create -f 1-nginx-namespace.yaml
+$ kubectl get ns
+$ kubectl config set-context demo-nginx \
+    --namespace=demo-nginx \
+    --user=kubernetes-admin \
+    --cluster=kubernetes
+$ kubectl config get-contexts
+$ kubectl config use-context demo-nginx
+$ kubectl config current-context
+$ kubectl create -f 1-nginx-pod.yaml
+$ kubectl get pods
+$ kubectl delete -f 1-nginx-pod.yaml
+$ kubectl delete namespace demo
+$ kubectl config delete-context demo
 ```
 
 
