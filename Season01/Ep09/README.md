@@ -78,11 +78,35 @@ $ vagrant up
     < wait 1 or 2 minutes >
 ```
 
-## command
+## NodeSelector
 ```
-$
-$
-$
+$ cat 1-nginx-deployment.yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        run: nginx
+      name: nginx-deploy
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          run: nginx
+      template:
+        metadata:
+          labels:
+            run: nginx
+        spec:
+          containers:
+          - image: nginx
+            name: nginx
+          nodeSelector:
+            demoserver: "true"      # label
+$ kubectl label node kworker2.example.com demoserver=true
+$ kubectl get node kworker2.example.com --show-labels
+$ kubectl apply -f 1-nginx-deployment.yaml
+$ kubectl scale deploy nginx-deploy --replicas 4
+$ kubectl delete deploy nginx-deploy
 ```
 
 
