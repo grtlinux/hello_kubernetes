@@ -117,7 +117,9 @@ $ kubectl label node kworker2.example.com env=proc
 $ ssh root@kmaster
     # cd /etc/kubernetes/manifests
     # vi kube-apiserver.yaml
+        .....
         - --enable-admission-plugins=NodeRestriction,PodNodeSelector     # add 'PodNodeSelector'
+        .....
     # logout
 $ kubectl create namespace dev
 $ kubectl create namespace prod
