@@ -109,7 +109,51 @@ $ kubectl scale deploy nginx-deploy --replicas 4
 $ kubectl delete deploy nginx-deploy
 ```
 
+## PodNodeSelector Admission Control Plugin: assign pods to nodes
+Google Search: 'PodNodeSelector' > kubernetes site > Search: 'Configuration Annotation Format'
+```
+$ kubectl label node kworker1.example.com env=dev
+$ kubectl label node kworker2.example.com env=proc
+$ ssh root@kmaster
+    # cd /etc/kubernetes/manifests
+    # vi kube-apiserver.yaml
+        - --enable-admission-plugins=NodeRestriction,PodNodeSelector     # add 'PodNodeSelector'
+    # logout
+$ kubectl create namespace dev
+$ kubectl create namespace prod
+$ kubectl edit ns dev
+    .....
+    metadata:
+      annotations:
+        scheduler.alpha.kubernetes.io/node-selector: "env=dev"
+    .....
+$ kubectl edit ns prod
+    .....
+    metadata:
+      annotations:
+        scheduler.alpha.kubernetes.io/node-selector: "env=prod"
+    .....
+$ watch -x kubectl -n dev get all -o wide
+$ kubectl -n dev run nginx --image nginx --replicas 4
+$ kubectl -n dev get pod nginx-XXXXX -o yaml | grep -i nodeselector
+$ kubectl -n dev get deploy nginx -o yaml | grep -i nodeselector
+$ kubectl -n dev delete deploy nginx
+$ kubectl describe ns dev
+    .....
+    Annotation: .... env=dev
+    .....
 
+$ watch -x kubectl -n prod get all -o wide
+$ kubectl -n prod run nginx --image nginx --replicas 3
+$ kubectl -n prod get pod nginx-XXXXX -o yaml | grep -i nodeselector
+$ kubectl -n prod get deploy nginx -o yaml | grep -i nodeselector
+$ kubectl -n prod delete deploy nginx
+$ kubectl describe ns prod
+    .....
+    Annotation: .... env=prod
+    .....
+$
+```
 
 
 
