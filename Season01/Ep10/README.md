@@ -98,6 +98,8 @@ $ cat 1-nginx-daemonset.yaml
           containers:
           - image: nginx
             name: nginx
+          nodeSelector:
+            gpupresent: "true"
 $ kubectl apply -f 1-nginx-daemonset.yaml
 $ kubectl get event
 $ kubectl describe daemonset nginx-daemonset
