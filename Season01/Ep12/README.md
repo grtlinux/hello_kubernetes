@@ -19,16 +19,8 @@
 ```
 $ mkdir play && cd $_
 $ git clone https://github.com/grtlinux/hello_kubernetes.git
-$ cd hello_kubernetes/Season01/Ep00/run0
+$ cd hello_kubernetes/Season01/Ep12/run0
 ```
-
-## Useful tools
-- git
-- docker
-- vagrant
-- virtualbox
-- tree
-- etc
 
 ## Make Vagrantfile and create machines
 ```
@@ -76,12 +68,71 @@ $ cat Vagrantfile
 ```
 $ vagrant up
     < wait 1 or 2 minutes >
+$ rm ~/.ssh/known_hosts
+$ scp vagrant@kmaster:.kube/config ~/.kube/config
+$ kubectl cluster-info
+$ kubectl version --short
+$ kubectl get nodes
+$ kubectl delete pods --all
 ```
 
-## command
+---
+## Init Container
 ```
 $
-$
+$ cat 3-init-container.yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        run: nginx
+      name: nginx-deploy
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          run: nginx
+      template:
+        metadata:
+          labels:
+            run: nginx
+
+        spec:
+
+          volumes:
+          - name: shared-volume
+            emptyDir: {}
+
+          initContainers:
+          - name: busybox
+            image: busybox
+            volumeMounts:
+            - name: shared-volume
+              mountPath: /nginx-data
+            command: ["/bin/sh"]
+            args: ["-c", "echo '<h1>Hello Kubernetes</h1>' > /nginx-data/index.html"]
+
+          containers:
+          - image: nginx
+            name: nginx
+            volumeMounts:
+            - name: shared-volume
+              mountPath: /usr/share/nginx/html
+$ kubectl create -f 3-init-container.yaml
+$ kubectl expose deploy nginx-deploy --type NodePort --target-port 30001 --port 80
+$ curl http://kworker1:32567
+$ curl http://kworker2:32567
+$ kubectl delete svc nginx-deploy
+$ kubectl delete deploy nginx-deploy
+$ cat 3-init-container.yaml
+    .....
+            command: ["/bin/123456"]
+            args: ["-c", "echo '<h1>Hello Kubernetes</h1>' > /nginx-data/index.html"]
+    .....
+$ kubectl create -f 3-init-container.yaml
+    < ERROR: Init:RunContainerError >
+$ kubectl describe deploy nginx-deploy | less
+$ kubctl delete -f 3-init-container.yaml
 $
 ```
 

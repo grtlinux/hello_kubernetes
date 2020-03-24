@@ -435,7 +435,40 @@ $ kubectl delete cronjob helloworld-cron
 - Checking out sources periodically
 
 
-
+## Deleting Jobs in Kubernetes after completion using feature gate TTLAfterFinished
+```
+$ ssh root@kmaster
+    # cd /etc/kubernetes/manifests
+    # cat kube-apiserver.yaml
+        ....
+        - --authorization-mode=Node,RBAC
+        - --feature-gates=TTLAfterFinished=true    # add a line
+        ....
+    # cat kube-controller-manager.yaml
+        ....
+        - --bind-address=127.0.0.1
+        - --feature-gates=TTLAfterFinished=true    # add a line
+        ....
+    # logout
+$ cat 2-job.yaml
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: helloworld
+    spec:
+      ttlSecondsAfterFinished: 20
+      template:
+        spec:
+          containers:
+            - name: busybox
+              image: busybox
+              command: ["echo", "Hello workd by Job...."]
+          restartPolicy: Never
+$ kubectl create -f 2-job.yaml
+$ kubectl describe job helloworld
+$ kubectl delete job hellowlrld
+$
+```
 
 
 
