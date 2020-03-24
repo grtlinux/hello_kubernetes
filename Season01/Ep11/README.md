@@ -19,16 +19,8 @@
 ```
 $ mkdir play && cd $_
 $ git clone https://github.com/grtlinux/hello_kubernetes.git
-$ cd hello_kubernetes/Season01/Ep00/run0
+$ cd hello_kubernetes/Season01/Ep11/run0
 ```
-
-## Useful tools
-- git
-- docker
-- vagrant
-- virtualbox
-- tree
-- etc
 
 ## Make Vagrantfile and create machines
 ```
@@ -76,17 +68,371 @@ $ cat Vagrantfile
 ```
 $ vagrant up
     < wait 1 or 2 minutes >
+$ rm ~/.ssh/known_hosts
+$ scp vagrant@kmaster:.kube/config ~/.kube/config
+$ kubectl cluster-info
+$ kubectl version --short
+$ kubectl get nodes
+$ kubectl delete pods --all
 ```
 
-## command
+---
+## Job
+- Default run
+- Killing pod restarts pod
+- Completions
+- Parallelism
+- Backofflimit
+- ActionDeadlineSeconds
+
+#### Deault run
 ```
-$
-$
-$
+$ watch -x kubectl get all
+$ cat 2-job.yaml
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: helloworld
+    spec:
+      template:
+        spec:
+          containers:
+            - name: busybox
+              image: busybox
+              command: ["echo", "Hello Kubernetes by Job. !!!"]
+              # command: ["sleep", "60"]
+          restartPolicy: Never
+$ kubectl create -f 2-job.yaml
+$ kubectl logs helloworld-xxxx
+$ kubectl describe job helloworld
+$ kubectl delete job hellowlrld
+```
+
+#### Killing pod restarts pod
+```
+$ cat 2-job.yaml
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: helloworld
+    spec:
+      template:
+        spec:
+          containers:
+            - name: busybox
+              image: busybox
+              # command: ["echo", "Hello Kubernetes by Job. !!!"]
+              command: ["sleep", "60"]
+          restartPolicy: Never
+$ kubectl create -f 2-job.yaml
+$ kubectl delete pod helloworld-xxxx
+$ kubectl delete job hellowlrld
+```
+
+#### Completions
+```
+$ cat 2-job.yaml
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: helloworld
+    spec:
+      complitions: 2
+      template:
+        spec:
+          containers:
+            - name: busybox
+              image: busybox
+              command: ["echo", "Hello Kubernetes by Job. !!!"]
+              # command: ["sleep", "60"]
+          restartPolicy: Never
+$ kubectl create -f 2-job.yaml
+$ kubectl describe job helloworld
+$ kubectl delete job hellowlrld
+```
+
+#### Parallelism
+```
+$ cat 2-job.yaml
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: helloworld
+    spec:
+      complitions: 2
+      parallelism: 2
+      template:
+        spec:
+          containers:
+            - name: busybox
+              image: busybox
+              command: ["echo", "Hello Kubernetes by Job. !!!"]
+              # command: ["sleep", "60"]
+          restartPolicy: Never
+$ kubectl create -f 2-job.yaml
+$ kubectl describe job helloworld
+$ kubectl delete job hellowlrld
+```
+
+#### Backofflimit
+```
+$ cat 2-job.yaml
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: helloworld
+    spec:
+      template:
+        spec:
+          containers:
+            - name: busybox
+              image: busybox
+              command: ["ls", "/kiea"]
+          restartPolicy: Never
+$ kubectl create -f 2-job.yaml
+$ kubectl delete job hellowlrld
+$ cat 2-job.yaml
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: helloworld
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          containers:
+            - name: busybox
+              image: busybox
+              command: ["ls", "/kiea"]
+          restartPolicy: Never
+$ kubectl create -f 2-job.yaml
+$ kubectl describe job helloworld | less
+$ kubectl delete job hellowlrld
+```
+
+#### ActionDeadlineSeconds
+```
+$ cat 2-job.yaml
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: helloworld
+    spec:
+      activeDeadlineSeconds: 10
+      parallelism: 2
+      template:
+        spec:
+          containers:
+            - name: busybox
+              image: busybox
+              command: ["sleep", "60"]
+          restartPolicy: Never
+$ kubectl create -f 2-job.yaml
+$ kubectl describe job helloworld
+$ kubectl delete job hellowlrld
+```
+
+---
+## CronJob
+- Default run
+- Cron wiki @hourly, @weekly, @monthly
+- Deleting cronjobs
+- SuccessfulJobsHistoryLimit
+- FailedJobsHistoryLimit
+- Suspending cron jobs (kubectl apply, patch)
+- ConcurrencyPolicy (Allow, Forbid & Replace)
+- Idempotency
+```
+      schedule: "* * * * *"
+        # minute (0 - 59)
+        # hour (0 - 23)
+        # day of month (1 - 31)
+        # month (1 - 12)
+        # day of week (0 - 6) (Sunday to Saturday)
+
+```
+
+#### Default run
+```
+$ watch -x kubectl get all
+$ cat 2-cronjob.yaml
+    apiVersion: batch/v1beta1
+    kind: CronJob
+    metadata:
+      name: helloworld-cron
+    spec:
+      schedule: "* * * * *"
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              containers:
+              - name: busybox
+                image: busybox
+                command: ["echo", "Hello Kubernetes by CronJob.!!!"]
+              restartPolicy: Never
+$ kubectl create -f 2-cronjob.yaml
+$ kubectl logs pod helloworld-cron-xxxxx
+$ kubectl describe cronjob helloworld-cron
+$ kubectl delete cronjob helloworld-cron
+```
+
+#### Deleting all pods and cronjobs
+```
+$ watch -x kubectl get all
+$ cat 2-cronjob.yaml
+    apiVersion: batch/v1beta1
+    kind: CronJob
+    metadata:
+      name: helloworld-cron
+    spec:
+      schedule: "* * * * *"
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              containers:
+              - name: busybox
+                image: busybox
+                command: ["echo", "Hello Kubernetes by CronJob.!!!"]
+              restartPolicy: Never
+$ kubectl create -f 2-cronjob.yaml
+$ kubectl delete pod --all
+$ kubectl delete cronjob helloworld-cron
+```
+
+#### SuccessfulJobsHistoryLimit and FailedJobsHistoryLimit
+```
+$ watch -x kubectl get all
+$ cat 2-cronjob.yaml
+    apiVersion: batch/v1beta1
+    kind: CronJob
+    metadata:
+      name: helloworld-cron
+    spec:
+      schedule: "* * * * *"
+      successfulJobsHistoryLimit: 0     # 2
+      failedJobHistoryLimit: 0          # 5
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              containers:
+              - name: busybox
+                image: busybox
+                command: ["echo", "Hello Kubernetes by CronJob.!!!"]
+              restartPolicy: Never
+$ kubectl create -f 2-cronjob.yaml
+$ kubectl describe cronjob helloworld-cron
+$ kubectl delete cronjob helloworld-cron
+```
+
+#### Suspending cron jobs (kubectl apply, patch)
+```
+$ watch -x kubectl get all
+$ cat 2-cronjob.yaml
+    apiVersion: batch/v1beta1
+    kind: CronJob
+    metadata:
+      name: helloworld-cron
+    spec:
+      schedule: "* * * * *"
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              containers:
+              - name: busybox
+                image: busybox
+                command: ["echo", "Hello Kubernetes by CronJob.!!!"]
+              restartPolicy: Never
+$ kubectl create -f 2-cronjob.yaml
+$ cat 2-cronjob.yaml
+    apiVersion: batch/v1beta1
+    kind: CronJob
+    metadata:
+      name: helloworld-cron
+    spec:
+      schedule: "* * * * *"
+      suspend: true
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              containers:
+              - name: busybox
+                image: busybox
+                command: ["echo", "Hello Kubernetes by CronJob.!!!"]
+              restartPolicy: Never
+$ kubectl create -f 2-cronjob.yaml
+$ kubectl apply -f 2-cronjob.yaml
+$ kubectl describe cronjob helloworld-cron
+$ cat 2-cronjob.yaml
+    .....
+    suspend: false
+    .....
+$ kubectl apply -f 2-cronjob.yaml
+$ kubectl patch cronjob helloworld-cron -p '{"spec":{"suspend":true}}'
+$ kubectl patch cronjob helloworld-cron -p '{"spec":{"suspend":false}}'
+$ kubectl delete cronjob helloworld-cron
+```
+
+#### ConcurrencyPolicy (Allow, Forbid & Replace)
+```
+$ watch -x kubectl get all
+$ cat 2-cronjob.yaml
+    apiVersion: batch/v1beta1
+    kind: CronJob
+    metadata:
+      name: helloworld-cron
+    spec:
+      schedule: "* * * * *"
+      concurrencyPolicy: Allow   # Allow Forbid Replace
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              containers:
+              - name: busybox
+                image: busybox
+                command: ["echo", "Hello Kubernetes by CronJob.!!!"]
+              restartPolicy: Never
+$ kubectl create -f 2-cronjob.yaml
+$ kubectl describe cronjob helloworld-cron
+$ kubectl delete cronjob helloworld-cron
+```
+
+#### Idempotency
+```
+$ watch -x kubectl get all
+$ cat 2-cronjob.yaml
+    apiVersion: batch/v1beta1
+    kind: CronJob
+    metadata:
+      name: helloworld-cron
+    spec:
+      schedule: "* * * * *"
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              containers:
+              - name: busybox
+                image: busybox
+                command: ["echo", "Hello Kubernetes by CronJob.!!!"]
+              restartPolicy: Never
+$ kubectl create -f 2-cronjob.yaml
+$ kubectl describe cronjob helloworld-cron
+$ kubectl delete cronjob helloworld-cron
 ```
 
 
-
+---
+## Usecases
+- MySQL Backup
+- Sending Emails
+- Any Backups
+- Checking out sources periodically
 
 
 

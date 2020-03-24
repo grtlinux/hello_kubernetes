@@ -8,5 +8,6 @@ spec:
       containers:
         - name: busybox
           image: busybox
-          command: ["echo", "Hello Kubernetes!!!"]
+          command: ["echo", "Hello Kubernetes by Job. !!!"]
+          # command: ["sleep", "60"]
       restartPolicy: Never

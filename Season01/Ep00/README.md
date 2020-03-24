@@ -76,6 +76,10 @@ $ cat Vagrantfile
 ```
 $ vagrant up
     < wait 1 or 2 minutes >
+$ scp vagrant@kmaster:.kube/config ~/.kube/config
+$ kubectl cluster-info
+$ kubectl version --short
+$ kubectl get nodes
 ```
 
 ## command
