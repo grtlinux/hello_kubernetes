@@ -80,16 +80,285 @@ $ kubectl delete pods --all
 ## Sequence about the Persistent Volume
 1. create PV
 2. create PVC
-3. Pod that uses PVC -> PV
+3. Pod that uses the PVC -> PV
+
+## ReclaimPolicy
+1. Retain
+2. Recycle
+3. Delete
+
+## Access Mode
+1. RWO (Read Write Once)
+2. RWM (Read Write Many)
+3. RO (Read Only)
+
 
 ---
-## Init Container
+## PersistentVolume, PersistentVolumeClaim and Hostpath
 ```
-$
+$ watch -x kubectl get pv -o wide
+
+$ cat 4-pv-hostpath.yaml
+    apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: pv-hostpath
+      labels:
+        type: local
+    spec:
+      storageClassName: manual
+      capacity:
+        storage: 1Gi
+      accessModes:
+        - ReadWriteOnce
+      hostPath:
+        path: "/kube"
+$ ssh root@kworker1
+    # mkdir /kube
+    # chmod 0777 /kube
+    # logout
+$ kubectl craete -f 4-pv-hostpath.yaml
+
+$ cat 4-pvc-hostpath.yaml
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: pvc-hostpath
+    spec:
+      storageClassName: manual
+      accessModes:
+        - ReadWriteOnce            # ReadWriteMany
+      resources:
+        requests:
+          storage: 100Mi
+$ kubectl create -f 4-pvc-hostpath.yaml
+
+$ cat 4-busybox-pv-hostpath.yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: busybox
+    spec:
+      volumes:
+      - name: host-volume
+        persistentVolumeClaim:
+          claimName: pvc-hostpath
+      containers:
+      - image: busybox
+        name: busybox
+        command: ["/bin/sh"]
+        args: ["-c", "sleep 600"]
+        volumeMounts:
+        - name: host-volume
+          mountPath: /mydata
+$ kubectl create -f 4-busybox-pv-hostpath.yaml
+$ kubectl exec busybox ls
+$ kubectl exec busybox ls /mydata
+$ kubectl exec busybox touch /mydata/hello
+$ kubectl exec busybox ls /mydata
+$ kubectl delete pod busybox
+$ kubectl delete pvc pvc-hostpath
+$ ssh root@kworker1                   # ssh root@kworker2
+    # cd /kube
+    # ls
+    # logout
+$ kubectl create -f 4-pvc-hostpath.yaml
+
+$ kubectl delete pvc pvc-hostpath
+$ kubectl delete pv pv-hostpath
+```
+
+```
+$ kubectl create -f 4-pv-hostpath.yaml
+$ kubectl create -f 4-pvc-hostpath.yaml
+$ cat 4-busybox-pv-hostpath.yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: busybox
+    spec:
+      volumes:
+      - name: host-volume
+        persistentVolumeClaim:
+          claimName: pvc-hostpath
+      containers:
+      - image: busybox
+        name: busybox
+        command: ["/bin/sh"]
+        args: ["-c", "sleep 600"]
+        volumeMounts:
+        - name: host-volume
+          mountPath: /mydata
+      nodeSelector:
+        demoserver: "true"
+$ kubectl get nodes -l demoserver=true
+$ kubectl label node kworker1.example.com demoserver=true
+$ kubectl get nodes -l demoserver=true
+$ kubectl create -f 4-busybox-pv-hostpath.yaml
+$ kubectl exec busybox touch /mydata/hello2
+$ kubectl delete pod busybox
+$ kubectl delete pvc pvc-hostpath
+$ kubectl delete pv pv-hostpath
+$ ssh root@kworker1
+    # cd /kube
+    # ls
+    # logout
 $
 ```
 
+```
+$ watch -x kubectl get pv,pvc,pod -o wide
 
+$ cat 4-pv-hostpath.yaml
+    apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: pv-hostpath
+      labels:
+        type: local
+    spec:
+      storageClassName: manual
+      persistentVolumeReclaimPolicy: Delete    # add
+      capacity:
+        storage: 1Gi
+      accessModes:
+        - ReadWriteOnce
+      hostPath:
+        path: "/tmp/kube"               # change
+$ cat 4-pvc-hostpath.yaml
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: pvc-hostpath
+    spec:
+      storageClassName: manual
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Mi
+$ cat 4-busybox-pv-hostpath.yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: busybox
+    spec:
+      volumes:
+      - name: host-volume
+        persistentVolumeClaim:
+          claimName: pvc-hostpath
+      containers:
+      - image: busybox
+        name: busybox
+        command: ["/bin/sh"]
+        args: ["-c", "sleep 600"]
+        volumeMounts:
+        - name: host-volume
+          mountPath: /mydata
+$ kubectl create -f 4-pv-hostpath.yaml
+$ kubectl create -f 4-pvc-hostpath.yaml
+$ kubectl create -f 4-busybox-pv-hostpath.yaml
+$ kubectl exec busybox touch /mydata/hello1
+$ kubectl exec busybox touch /mydata/hello2
+$ kubectl delete po busybox
+$ kubectl delete pvc pvc-hostpath
+$ kubectl delete pv pv-hostpath
+$ ssh root@kworker1               root@kworker2
+    # cd /tmp/kube
+    # ls
+        hello1  hello2
+    # logout
+$
+```
+
+## PersistentVolume, PersistentVolumeClaim and Hostpath
+```
+$ sudo apt update && sudo apt upgrade
+$ sudo apt install nfs-kernel-server
+$ sudo cat /proc/fs/nfsd/versions
+    -2 +3 +4 +4.1 +4.2
+$ sudo mkdir /srv/nfs/kube -p
+$ sudo chmod 0777 /srv/nfs/kube
+$ sudo vi /etc/exports
+    /srv/nfs/kube    172.42.42.0/24(rw,sync)
+$ sudo exportfs -r
+$ sudo showmount -e
+$ sudo systemctl restart nfs-server
+$ sudo systemctl status nfs-server
+$ ssh root@kworker1
+    # mount 172.42.42.1:/srv/nfs/kube /mnt
+    # umount /mnt
+    # logout
+$
+```
+
+```
+$ watch -x kubectl get pv -o wide
+
+$ cat 4-pv-nfs.yaml
+    apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: pv-nfs-pv1
+      labels:
+        type: local
+    spec:
+      storageClassName: manual
+      capacity:
+        storage: 1Gi
+      accessModes:
+        - ReadWriteMany
+      nfs:
+        server: 172.42.42.1
+        path: "/srv/nfs/kube"
+$ cat 4-pvc-nfs.yaml
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: pvc-nfs-pv1
+    spec:
+      storageClassName: manual
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 500Mi
+$ cat 4-nfs-nginx.yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        run: nginx
+      name: nginx-deploy
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          run: nginx
+      template:
+        metadata:
+          labels:
+            run: nginx
+        spec:
+          volumes:
+          - name: www
+            persistentVolumeClaim:
+              claimName: pvc-nfs-pv1
+          containers:
+          - image: nginx
+            name: nginx
+            volumeMounts:
+            - name: www
+              mountPath: /usr/share/nginx/html
+$ kubectl create -f 4-pv-nfs.yaml
+$ kubectl create -f 4-pvc-nfs.yaml
+$ kubectl create -f 4-nfs-nginx.yaml
+$
+$ kubectl delete -f 4-nfs-nginx.yaml
+$ kubectl delete -f 4-pvc-nfs.yaml
+$ kubectl delete -f 4-pv-nfs.yaml
+$
+```
 
 
 
