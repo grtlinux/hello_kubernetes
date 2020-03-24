@@ -19,16 +19,8 @@
 ```
 $ mkdir play && cd $_
 $ git clone https://github.com/grtlinux/hello_kubernetes.git
-$ cd hello_kubernetes/Season01/Ep00/run0
+$ cd hello_kubernetes/Season01/Ep14/run0
 ```
-
-## Useful tools
-- git
-- docker
-- vagrant
-- virtualbox
-- tree
-- etc
 
 ## Make Vagrantfile and create machines
 ```
@@ -76,18 +68,151 @@ $ cat Vagrantfile
 ```
 $ vagrant up
     < wait 1 or 2 minutes >
+$ rm ~/.ssh/known_hosts
+$ scp vagrant@kmaster:.kube/config ~/.kube/config
+$ kubectl cluster-info
+$ kubectl version --short
+$ kubectl get nodes
+$ kubectl delete pods --all
 ```
 
-## command
+---
+## Secret
 ```
-$
-$
+$ kubectl get secrets
+$ echo -n "kubeadmin" | base64
+$ echo -n "mypassword" | base64
+$ cat 5-secrets.yaml
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: secret-demo
+    type: Opaque
+    data:
+      username: XXXXX
+      password: XXXXXX
+$ kubectl create -f 5-secrets.yaml
+$ kubectl get secret secret-demo -o yaml
+$ kubectl describe secret secret-demo
+$ kubectl delete secret secret-demo
+```
+
+```
+$ kubectl create secret generic secret-demo \
+    --from-literal=username=kubeadmin \
+    --from-literal=password=mypassword
+$ kubectl get secret
+$ kubectl delete secret secret-demo
+```
+
+```
+$ cat username
+    kubeadmin
+$ cat password
+    mypassword
+$ kubectl create secret generic secret-demo \
+    --from-file=./username \
+    --from-file=./password
+$ kubectl get secret
+$ kubectl delete secret secret-demo
+```
+
+```
+$ kubectl create secret generic secret-demo \
+    --from-literal=username=kubeadmin \
+    --from-literal=password=mypassword
+$ cat 5-pod-secret-env.yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: busybox
+    spec:
+      containers:
+      - image: busybox
+        name: busybox
+        command: ["/bin/sh"]
+        args: ["-c", "sleep 600"]
+        env:
+        - name: myusername
+          valueFrom:
+            secretKeyRef:
+              name: secret-demo
+              key: username
+$ kubectl create -f 5-pod-secret-env.yaml
+$ kubectl exec -it busybox -- sh
+    # env | grep myusername
+    # echo $myusername
+    # exit
+$ kubectl delete pod busybox
+```
+
+```
+$ kubectl create secret generic secret-demo \
+    --from-file=./username \
+    --from-file=./password
+$ cat 5-pod-secret-volume.yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: busybox
+    spec:
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: secret-demo
+      containers:
+      - name: busybox
+        image: busybox
+        command: ["/bin/sh"]
+        args: ["-c", "sleep 600"]
+        volumeMounts:
+        - name: secret-volume
+          mountPath: /mydata
+$ kubectl create -f 5-pod-secret-volume.yaml
+$ kubectl exec -it busybox -- sh
+    # cd /mydata
+    # ls
+    # cat username; echo
+    # cat password; echo
+    # exit
+$ kubectl delete pod busybox
 $
 ```
 
-
-
-
+#### change the secret files after 'kubectl apply -f ...'
+```
+$ kubectl create secret generic secret-demo \
+    --from-literal=username=kubeadmin \
+    --from-literal=password=mypassword
+$ kubectl create -f 5-pod-secret-volume.yaml
+$ kubectl exec -it busybox -- sh
+    # cd /mydata
+    # ls
+        username   password
+    # exit
+$ echo -n "kubeadmin" | base64
+$ echo -n "myrandompassword" | base64
+$ echo -n "kiea" | base64
+$ cat 5-secrets.yaml
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: secret-demo
+    type: Opaque
+    data:
+      name: XXXXX
+      username: XXXXX
+      password: XXXXXX
+$ kubectl apply -f 5-secrets.yaml
+$ kubectl exec -it busybox -- sh
+    # cd /mydata
+    # ls
+        kiea   username   password
+    # exit
+$ kubectl get secret secret-demo -o yaml
+$ kubectl describe secret secret-demo
+$ kubectl delete secret secret-demo
+```
 
 
 
