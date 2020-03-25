@@ -19,16 +19,8 @@
 ```
 $ mkdir play && cd $_
 $ git clone https://github.com/grtlinux/hello_kubernetes.git
-$ cd hello_kubernetes/Season01/Ep00/run0
+$ cd hello_kubernetes/Season01/Ep17/run0
 ```
-
-## Useful tools
-- git
-- docker
-- vagrant
-- virtualbox
-- tree
-- etc
 
 ## Make Vagrantfile and create machines
 ```
@@ -76,8 +68,15 @@ $ cat Vagrantfile
 ```
 $ vagrant up
     < wait 1 or 2 minutes >
+$ rm ~/.ssh/known_hosts
+$ scp vagrant@kmaster:.kube/config ~/.kube/config
+$ kubectl cluster-info
+$ kubectl version --short
+$ kubectl get nodes
+$ kubectl delete pods --all
 ```
 
+---
 ## command
 ```
 $
