@@ -211,6 +211,7 @@ $ kubectl exec -it busybox -- sh
     # exit
 $ kubectl get secret secret-demo -o yaml
 $ kubectl describe secret secret-demo
+$ kubectl edit secret secret-demo
 $ kubectl delete secret secret-demo
 ```
 

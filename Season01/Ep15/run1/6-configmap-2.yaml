@@ -9,8 +9,8 @@ data:
     socket          = /var/run/mysqld/mysqld.sock
     port            = 3306
     datadir         = /var/lib/mysql
-    default-storage-engine = InnoDB
-    character-set-server = utf8
+    default-storage-engine  = InnoDB
+    character-set-server    = utf8
     bind-address            = 127.0.0.1
     general_log_file        = /var/log/mysql/mysql.log
-    log_error = /var/log/mysql/error.log
+    log_error               = /var/log/mysql/error.log

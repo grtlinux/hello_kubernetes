@@ -19,19 +19,12 @@
 ```
 $ mkdir play && cd $_
 $ git clone https://github.com/grtlinux/hello_kubernetes.git
-$ cd hello_kubernetes/Season01/Ep00/run0
+$ cd hello_kubernetes/Season01/Ep16/run0
 ```
-
-## Useful tools
-- git
-- docker
-- vagrant
-- virtualbox
-- tree
-- etc
 
 ## Make Vagrantfile and create machines
 ```
+$ cd ubuntu18
 $ cat Vagrantfile
     # -*- mode: ruby -*-
     # vi: set ft=ruby :
@@ -40,36 +33,20 @@ $ cat Vagrantfile
 
     Vagrant.configure(2) do |config|
 
-    # Kubernetes Master Server
-    config.vm.define "kmaster" do |kmaster|
-        kmaster.vm.box = "centos/7"
-        kmaster.vm.hostname = "kmaster.example.com"
-        kmaster.vm.network "private_network", ip: "172.42.42.100"
-        kmaster.vm.provider "virtualbox" do |v|
-        v.name = "kmaster"
-        v.memory = 2048
-        v.cpus = 2
-        # Prevent VirtualBox from interfering with host audio stack
-        v.customize ["modifyvm", :id, "--audio", "none"]
-        end
-    end
+      NodeCount = 1
 
-    NodeCount = 2
-    # Kubernetes Worker Nodes
-    (1..NodeCount).each do |i|
-        config.vm.define "kworker#{i}" do |workernode|
-        workernode.vm.box = "centos/7"
-        workernode.vm.hostname = "kworker#{i}.example.com"
-        workernode.vm.network "private_network", ip: "172.42.42.10#{i}"
-        workernode.vm.provider "virtualbox" do |v|
-            v.name = "kworker#{i}"
-            v.memory = 1024
-            v.cpus = 1
-            # Prevent VirtualBox from interfering with host audio stack
-            v.customize ["modifyvm", :id, "--audio", "none"]
+      (1..NodeCount).each do |i|
+        config.vm.define "ubuntuvm0#{i}" do |node|
+          node.vm.box = "ubuntu/bionic64"
+          node.vm.hostname = "ubuntuvm0#{i}.example.com"
+          node.vm.network "private_network", ip: "172.42.42.10#{i}"
+          node.vm.provider "virtualbox" do |v|
+            v.name = "ubuntuvm0#{i}"
+            v.memory = 4096
+            v.cpus = 3
+          end
         end
-        end
-    end
+      end
 
     end
 ```
