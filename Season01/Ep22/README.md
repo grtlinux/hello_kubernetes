@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/nginxinc/kubernetes-ingress.svg?branch=master)](https://travis-ci.org/nginxinc/kubernetes-ingress)  [![FOSSA Status](https://app.fossa.io/api/projects/custom%2B1062%2Fgithub.com%2Fnginxinc%2Fkubernetes-ingress.svg?type=shield)](https://app.fossa.io/projects/custom%2B1062%2Fgithub.com%2Fnginxinc%2Fkubernetes-ingress?ref=badge_shield)  [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)  [![Go Report Card](https://goreportcard.com/badge/github.com/nginxinc/kubernetes-ingress)](https://goreportcard.com/report/github.com/nginxinc/kubernetes-ingress)
 
-# Ep00. Install Tools
+# Ep22. How to upgrade your Kubernetes Cluster
 
 ## Ready
 |Preinstall|Version|
@@ -19,7 +19,7 @@
 ```
 $ mkdir play && cd $_
 $ git clone https://github.com/grtlinux/hello_kubernetes.git
-$ cd hello_kubernetes/Season01/Ep00/run0
+$ cd hello_kubernetes/Season01/Ep22/run0
 ```
 
 ## Useful tools
