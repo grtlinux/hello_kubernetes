@@ -7,6 +7,7 @@
 |----|----|
 |Vagrant|1.0|
 |VirtualBox|6.0|
+|Kubernetes|1.17.0|
 
 ## Assumptions
 |Role|FQDN|IP|OS|RAM|CPU|
@@ -74,11 +75,59 @@ $ kubectl cluster-info
 $ kubectl version --short
 $ kubectl get nodes
 $ kubectl delete pods --all
+$ kubectl api-resources
 ```
 
 ---
-## command
+## 1st
 ```
+$ watch -x kubectl get all -o wide
+
+$ kubectl get nodes
+$ kubectl run nginx1 --image nginx
+$ kubectl run nginx2 --image nginx
+$ kubectl delete pod nginx1 --force
+$ kubectl delete pod nginx2 --force
+
+$ ssh root@kworker2
+    # hostname
+    # hostnamectl set-hostname kubeworker2.example.com
+    # vi /etc/hosts
+        .....
+        172.42.42.102 kubeworker2.example.com kubeworker2
+    # reboot
+$ ssh root@kworker1
+    # vi /etc/hosts
+        .....
+        172.42.42.102 kubeworker2.example.com kubeworker2
+    # logout
+$ ssh root@kmaster
+    # vi /etc/hosts
+        .....
+        172.42.42.102 kubeworker2.example.com kubeworker2
+    # kubeadm token create --print-join-command
+        kubeadm .....(token).....
+    # logout
+$ sudo vi /etc/hosts
+    .....
+    172.42.42.102 kubeworker2.example.com kubeworker2
+$ ssh root@kubeworker2
+    # journalctl --unit=kubelet
+        .....
+        ... node "kubeworker2.example.com" not found
+    # systemctl status kubelet
+        .....
+    #
+$ kubectl edit no kworker2.example.com
+    :%s/kworker2/kubeworker2/
+$ kubectl delete no kworker2.example.com
+    < ERROR>
+
+$ ssh root@kubeworker2
+    # kubeadm reset
+    # kubeadm .....(token).....
+$ kubectl drain kworker1.example.com
+$
 $
 $
 $
