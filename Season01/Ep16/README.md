@@ -225,7 +225,54 @@ $
 
 ## Quota Limitrange
 ```
-$ watch  microk8s.kubectl -n quota-demo-ns get po,deploy,replicaset,quota
+$ watch  microk8s.kubectl -n quota-demo-ns get po,deploy,replicaset,limitrange,quota
+
+$ cat 7-quota-mem.yaml
+    apiVersion: v1
+    kind: ResourceQuota
+    metadata:
+      name: quota-demo-mem
+      namespace: quota-demo-ns
+    spec:
+      hard:
+        limits.memory: "500Mi"
+$ kubectl create -f 7-quota-mem.yaml
+$ vi 7-quota-mem.yaml
+    ....
+        limits.memory: "500Mi"
+        requests.memory: "100Mi"
+$ kubectl apply -f 7-quota-mem.yaml
+$ kubectl -n quota-demo-ns describe quota quota-demo-mem
+
+$ vi 7-pod-quota-mem.yaml
+    .....
+    name: nginx
+    resources:
+      limits:
+        memory: "200Mi"
+$ kubectl create -f 7-pod-quota-mem.yaml
+    < ERROR >
+$ vi 7-pod-quota-mem.yaml
+    .....
+    name: nginx
+    resources:
+      limits:
+        memory: "200Mi"
+      requests:
+        memory: "50Mi"
+$ kubectl create -f 7-pod-quota-mem.yaml
+$ kubectl -n quota-demo-ns describe pod nginx
+$ kubectl delete -f 7-pod-quota-mem.yaml
+$ vi 7-pod-quota-mem.yaml
+    .....
+    name: nginx
+    resources:
+      limits:
+        memory: "200Mi"
+      requests:
+        memory: "150Mi"
+$ kubectl -n quota-demo-ns describe quota quota-demo-mem
+$ kubectl create -f 7-pod-quota-mem.yaml
 
 $ cat 7-quota-limitrange.yaml
     apiVersion: v1
@@ -241,7 +288,9 @@ $ cat 7-quota-limitrange.yaml
           memory: 50Mi
         type: Container
 $ kubectl create -f 7-quota-limitrange.yaml
-$ kubectl -n quota-demo-ns describe quota quota-demo-mem
+$ kubectl -n quota-demo-ns describe limitrange mem-limitrange
+$ kubectl create -f 7-pod-quota-mem.yaml
+$ kubectl -n quota-demo-ns describe pod nginx
 $
 $
 $
